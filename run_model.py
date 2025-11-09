@@ -36,8 +36,7 @@ def run_ollama(prompt):
     # This is the command we will run, broken into a list
     command = [
         "docker", "exec", CONTAINER_NAME,
-        "ollama", "run", MODEL_NAME,
-        prompt, "--verbose"
+        "ollama", "run", MODEL_NAME, "--verbose", prompt
     ]
     
     try:
