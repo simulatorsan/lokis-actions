@@ -1,0 +1,18 @@
+name: Setup Ollama Job
+on: [workflow_dispatch] # Allows you to run this manually
+
+jobs:
+  run-ollama-script:
+    # Target your Raspberry Pi runner
+    runs-on: [self-hosted, arm64, rpi]
+
+    steps:
+      - name: 1. Check out repository code
+        # This "imports all the files from the workplace"
+        uses: actions/checkout@v4
+
+      - name: 2. Make script executable
+        run: chmod +x ./setup_ollama.sh
+
+      - name: 3. Run the Ollama setup script
+        run: ./setup_ollama.sh
