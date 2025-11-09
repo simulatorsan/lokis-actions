@@ -22,7 +22,6 @@ else
   echo "Starting $CONTAINER_NAME container on host port $HOST_PORT..."
   docker run -d -p $HOST_PORT:11434 \
     --name $CONTAINER_NAME \
-    --gpus all \
     ollama/ollama
   
   echo "Waiting for Ollama API to be ready at $API_URL..."
