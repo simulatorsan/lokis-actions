@@ -1,0 +1,23 @@
+name: Test Self-Hosted Runner
+on: [workflow_dispatch] # Allows you to run this manually
+
+jobs:
+  test-runner-job:
+    # This is the most important part:
+    # It targets the labels you set up.
+    runs-on: [self-hosted, arm64, rpi]
+
+    steps:
+      - name: 1. Print Runner Info
+        run: |
+          echo "✅ Job is running on: $(hostname)"
+          echo "✅ Architecture: $(uname -a)"
+
+      - name: 2. Test Docker Socket
+        run: |
+          echo "---"
+          echo "Testing Docker connection..."
+          docker ps
+          echo "---"
+          echo "Docker info:"
+          docker info
