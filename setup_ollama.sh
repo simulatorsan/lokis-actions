@@ -24,19 +24,19 @@ else
     --name $CONTAINER_NAME \
     ollama/ollama
   
-  echo "Waiting for Ollama API to be ready at $API_URL..."
-  until curl --fail --silent --output /dev/null $API_URL; do
-    echo "Waiting..."
-    sleep 1
+  echo "Waiting for Ollama service inside the container to be ready..."
+  # Wait by running 'ollama list' inside the container until it succeeds.
+  until docker exec $CONTAINER_NAME ollama list >/dev/null 2>&1; do
+    echo "Waiting for ollama service in $CONTAINER_NAME..."
+    sleep 2
   done
   
   echo "Ollama container is up."
 fi
 
-# 2. Pull the model
+# 2. Pull the model using 'docker exec'
 echo "Pulling model '$MODEL_TO_PULL'..."
-curl $API_URL/api/pull -d '{
-  "name": "'"$MODEL_TO_PULL"'"
-}'
+docker exec $CONTAINER_NAME ollama pull $MODEL_TO_PULL
+
 echo "Model pull complete."
 echo "--- Script Finished ---"
