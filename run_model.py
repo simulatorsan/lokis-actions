@@ -44,9 +44,14 @@ def run_ollama(prompt):
         # We use 'subprocess.run' which is simpler than Popen
         result = subprocess.run(command, capture_output=True, text=True, check=True)
         
-        print("\n--- Model Output ---")
+        print("\n--- Model Output (from stdout) ---")
         print(result.stdout)
-        print("--------------------")
+        print("----------------------------------")
+        
+        # --- THIS IS THE FIX ---
+        print("\n--- Verbose Stats (from stderr) ---")
+        print(result.stderr)
+        print("-----------------------------------")
 
     except subprocess.CalledProcessError as e:
         print(f"Error running 'docker exec': {e}", file=sys.stderr)
