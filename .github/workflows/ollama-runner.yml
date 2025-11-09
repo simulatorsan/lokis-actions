@@ -1,18 +1,30 @@
-name: Setup Ollama Job
+name: Run Ollama Prompt
 on: [workflow_dispatch] # Allows you to run this manually
 
 jobs:
-  run-ollama-script:
+  run-model-from-prompt:
     # Target your Raspberry Pi runner
     runs-on: [self-hosted, arm64, rpi]
 
     steps:
       - name: 1. Check out repository code
-        # This "imports all the files from the workplace"
         uses: actions/checkout@v4
 
-      - name: 2. Make script executable
+      - name: 2. Make setup script executable
         run: chmod +x ./setup_ollama.sh
 
-      - name: 3. Run the Ollama setup script
+      - name: 3. Run Ollama setup script
+        # This ensures the container is running and model is pulled
         run: ./setup_ollama.sh
+
+      - name: 4. Install Python dependencies
+        # The 'myoung34/github-runner' image is based on Ubuntu
+        # We need to install pip and the 'requests' library
+        run: |
+          apt-get update -y
+          apt-get install -y python3-pip
+          pip3 install requests
+
+      - name: 5. Run the Python script
+        # This will fetch the prompt and run the model
+        run: python3 ./run_model.py
