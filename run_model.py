@@ -30,38 +30,72 @@ def get_prompt():
         # sys.exit(1)
 
 def run_ollama(prompt):
-    """Runs the prompt against the Ollama container using 'docker exec'."""
+    """
+    Runs the prompt against the Ollama container, captures output,
+    and returns the combined, filtered result.
+    """
     print(f"Running prompt against model '{MODEL_NAME}' in container '{CONTAINER_NAME}'...")
     
-    # This is the command we will run, broken into a list
     command = [
         "docker", "exec", CONTAINER_NAME,
         "ollama", "run", MODEL_NAME, prompt, "--verbose"
     ]
     
     try:
-        # Run the command, capture its output, and print it
-        # We use 'subprocess.run' which is simpler than Popen
         result = subprocess.run(command, capture_output=True, text=True, check=True)
         
+        stdout = result.stdout
+        stderr = result.stderr
+
+        # --- Filter stderr to remove junk before "total duration:" ---
+        filter_key = "total duration:"
+        stats_index = stderr.find(filter_key)
+        
+        if stats_index != -1:
+            filtered_stderr = stderr[stats_index:]
+        else:
+            filtered_stderr = stderr # Fallback if key isn't found
+
         print("\n--- Model Output (from stdout) ---")
-        print(result.stdout)
+        print(stdout)
         print("----------------------------------")
         
-        # --- THIS IS THE FIX ---
-        print("\n--- Verbose Stats (from stderr) ---")
-        print(result.stderr)
+        print("\n--- Verbose Stats (filtered stderr) ---")
+        print(filtered_stderr)
         print("-----------------------------------")
+
+        # --- Combine stdout and filtered stderr ---
+        combined_output = f"{stdout}\n{filtered_stderr}"
+        return combined_output
 
     except subprocess.CalledProcessError as e:
         print(f"Error running 'docker exec': {e}", file=sys.stderr)
         print(f"Stderr: {e.stderr}", file=sys.stderr)
-        sys.exit(1)
+        return None # Return None on failure
     except FileNotFoundError:
         print("Error: 'docker' command not found. Is Docker installed and in the PATH?", file=sys.stderr)
-        sys.exit(1)
+        return None # Return None on failure
+
+def send_results(prompt, result_text):
+    """Sends the prompt and the combined result back to the server."""
+    endpoint = f"{BASE_URL}/return_results"
+    payload = {
+        "prompt": prompt,
+        "result": result_text
+    }
+    
+    try:
+        print(f"Sending results to {endpoint}...")
+        response = requests.post(endpoint, json=payload)
+        response.raise_for_status()
+        print("Results sent successfully.")
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending results: {e}", file=sys.stderr)
 
 if __name__ == "__main__":
     prompt_to_run = get_prompt()
     if prompt_to_run:
-        run_ollama(prompt_to_run)
+        combined_output = run_ollama(prompt_to_run)
+        
+        if combined_output:
+            send_results(prompt_to_run, combined_output)
