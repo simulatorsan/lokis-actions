@@ -3,8 +3,8 @@ import subprocess
 import sys
 import time
 
-# BASE_URL = "https://MY_NGROK_URL.ngrok.io"
-BASE_URL = "http://127.0.0.1:5000"  # Change to ngrok URL when ready
+BASE_URL = "https://molybdous-tatyana-proximately.ngrok-free.dev"
+# BASE_URL = "http://127.0.0.1:5000"  # Change to ngrok URL when ready
 
 CONTAINER_NAME = "ollama-gh"
 MODEL_NAME = "qwen:0.5b"
