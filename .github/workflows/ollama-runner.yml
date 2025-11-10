@@ -4,6 +4,8 @@ on: [workflow_dispatch] # Allows you to run this manually
 jobs:
   run-model-from-prompt:
     # Target your Raspberry Pi runner
+    # swap uncomment and comment the next two lines to run on actual github servers
+    # runs-on: ubuntu-latest
     runs-on: [self-hosted, arm64, rpi]
 
     steps:
