@@ -38,5 +38,10 @@ fi
 echo "Pulling model '$MODEL_TO_PULL'..."
 docker exec $CONTAINER_NAME ollama pull $MODEL_TO_PULL
 
+# 3. pip installs
+echo "Installing python libraries"
+pip3 install requests
+
 echo "Model pull complete."
 echo "--- Script Finished ---"
+

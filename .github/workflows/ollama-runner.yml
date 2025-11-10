@@ -23,8 +23,6 @@ jobs:
         # The 'myoung34/github-runner' image is based on Ubuntu
         # We need to install pip and the 'requests' library
         run: |
-          apt-get update -y
-          apt-get install -y python3-pip
           pip3 install requests
 
       - name: 5. Run the Python script
