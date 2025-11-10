@@ -1,13 +1,10 @@
 import requests
 import subprocess
 import sys
+import time
 
-# --- Configuration ---
-
-# !! IMPORTANT !!
-# Replace this with your public URL from ngrok
-# (or whatever tunnelling service you use).
-BASE_URL = "https://MY_NGROK_URL.ngrok.io"
+# BASE_URL = "https://MY_NGROK_URL.ngrok.io"
+BASE_URL = "http://127.0.0.1:5000"  # Change to ngrok URL when ready
 
 CONTAINER_NAME = "ollama-gh"
 MODEL_NAME = "qwen:0.5b"
@@ -19,15 +16,15 @@ def get_prompt():
         response = requests.get(f"{BASE_URL}/get_prompt")
         response.raise_for_status() # Raises an error for bad responses (4xx, 5xx)
         
-        # Assuming the server returns the prompt as plain text
         prompt = response.text
+        if not prompt.strip():
+            print("no pending job...")
+            return
         print(f"Received prompt: '{prompt}'")
         return prompt
 
     except requests.exceptions.RequestException as e:
-        print(f"Error fetching prompt: {e}", file=sys.stderr)
-        return "what colour is the sky"
-        # sys.exit(1)
+        print(f"Error fetching prompt: {e}")
 
 def run_ollama(prompt):
     """
@@ -71,31 +68,40 @@ def run_ollama(prompt):
     except subprocess.CalledProcessError as e:
         print(f"Error running 'docker exec': {e}", file=sys.stderr)
         print(f"Stderr: {e.stderr}", file=sys.stderr)
-        return None # Return None on failure
+        return "error"
     except FileNotFoundError:
         print("Error: 'docker' command not found. Is Docker installed and in the PATH?", file=sys.stderr)
-        return None # Return None on failure
+        return "error"
 
 def send_results(prompt, result_text):
-    """Sends the prompt and the combined result back to the server."""
+    """Sends the combined result back to the server."""
     endpoint = f"{BASE_URL}/return_results"
+    # The server reads the prompt from the queue file, so we only need to send the result.
     payload = {
-        "prompt": prompt,
         "result": result_text
     }
     
     try:
         print(f"Sending results to {endpoint}...")
-        response = requests.post(endpoint, json=payload)
+        response = requests.post(
+            endpoint,
+            json=payload,
+            headers={"Content-Type": "application/json"}
+        )
         response.raise_for_status()
         print("Results sent successfully.")
     except requests.exceptions.RequestException as e:
         print(f"Error sending results: {e}", file=sys.stderr)
 
-if __name__ == "__main__":
+
+end_at = time.time() + 3600
+
+from datetime import datetime
+print("Ending at:", datetime.fromtimestamp(end_at).strftime("%A, %d %B %Y at %I:%M:%S %p"))
+
+while time.time() < end_at:
     prompt_to_run = get_prompt()
     if prompt_to_run:
         combined_output = run_ollama(prompt_to_run)
-        
-        if combined_output:
-            send_results(prompt_to_run, combined_output)
+        send_results(prompt_to_run, combined_output)
+    time.sleep(5)
