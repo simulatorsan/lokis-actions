@@ -2,6 +2,12 @@ name: Run Integrate C Program
 
 on:
   workflow_dispatch:
+    inputs:
+      exponent:
+        description: 'Exponent for n (n = 2^exponent)'
+        required: true
+        default: '36'
+        type: string
 
 jobs:
   build-and-run:
@@ -16,7 +22,7 @@ jobs:
       - name: Compile integrate.c
         run: gcc -fopenmp -o integrate integrate.c -lm
 
-      - name: Run integrate with time (n = 10^35)
+      - name: Run integrate with time (n = 2^exponent)
         run: |
           set -x
-          time ./integrate 35
+          time ./integrate ${{ github.event.inputs.exponent }}
