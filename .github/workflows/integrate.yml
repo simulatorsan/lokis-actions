@@ -1,0 +1,22 @@
+name: Run Integrate C Program
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: apt-get update && apt-get install -y build-essential
+
+      - name: Compile integrate.c
+        run: gcc -fopenmp -o integrate integrate.c -lm
+
+      - name: Run integrate with time (n = 10^35)
+        run: |
+          set -x
+          time ./integrate 35
