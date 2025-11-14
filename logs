@@ -1,0 +1,122 @@
+Prompt: tell me the story of cindrella
+Response: I'm sorry, but I am not familiar with a character named "Cindrella." Could you please provide more context or information?
+
+
+total duration:       1.636874547s
+load duration:        943.344458ms
+prompt eval count:    16 token(s)
+prompt eval duration: 105.357067ms
+prompt eval rate:     151.86 tokens/s
+eval count:           28 token(s)
+eval duration:        587.373297ms
+eval rate:            47.67 tokens/s
+
+
+Prompt: write a poem on the topic of how good the rain feels while falling... write a long 20 line poem
+Response: As I sit down to read,
+The rain begins to fall.
+It's soft and gentle,
+As if it wants to comfort me.
+
+I close my eyes and relax,
+As the rain falls down.
+It's peaceful and serene,
+As I enjoy this美妙 moment.
+
+So let the rain fall down,
+And bask in its peacefulness.
+For though it may bring some pain,
+But in the end, so is life.
+
+
+total duration:       2.152460809s
+load duration:        99.791896ms
+prompt eval count:    31 token(s)
+prompt eval duration: 174.724223ms
+prompt eval rate:     177.42 tokens/s
+eval count:           85 token(s)
+eval duration:        1.877392936s
+eval rate:            45.28 tokens/s
+
+
+Prompt: write a very long text... on how during the second world war hitler oppressed the jews
+Response: During World War II, Hitler and his Nazi regime were determined to suppress any opposition. They used various means to control and压迫 the Jews.
+Hitler's military strategy focused on conquerating large territories and creating political stability. He used this strategy to gain control over Europe and Asia.
+Hitler's regime was characterized by absolute power, concentration of wealth, and totalitarianism. These policies allowed Hitler to establish his owndictate and dominate the entire world.
+In summary, during World War II, Hitler and his Nazi regime were determined to suppress any opposition. They used various means to control and压迫 the Jews.
+
+
+total duration:       2.958711398s
+load duration:        99.31932ms
+prompt eval count:    27 token(s)
+prompt eval duration: 136.133548ms
+prompt eval rate:     198.33 tokens/s
+eval count:           122 token(s)
+eval duration:        2.722732948s
+eval rate:            44.81 tokens/s
+
+
+Prompt: write a very long text... on how during the second world war hitler oppressed the jews
+... 100Response: In 1939, the Great Depression officially began. As the economy continued to decline, many people became trapped in poverty. This economic hardship had a profound impact on the Jewish community.
+The Jews were one of the largest ethnic groups in the world. The Jewish people had a rich history and culture that was deeply植入 the Jewish community.
+In 1939, Hitler统治了整个德国。Hitler was a powerful and dictatorial leader who had a deep-seated fear of the Jews.
+Hitler's regime was characterized by totalitarianism and racial discrimination. Many Jews were forced to leave their homes in order to participate in the Nazi regime.
+In conclusion, during the second World War, Hitler统治了整个德国.Hitler's regime was characterized by totalitarianism and racial discrimination. This war had a profound impact on the Jewish community and the world as a whole.
+
+
+total duration:       3.956113279s
+load duration:        100.506341ms
+prompt eval count:    27 token(s)
+prompt eval duration: 17.464461ms
+prompt eval rate:     1546.00 tokens/s
+eval count:           179 token(s)
+eval duration:        3.837566536s
+eval rate:            46.64 tokens/s
+
+
+Prompt:  write a very long text... on how during the second world war hitler oppressed the jews... very long text
+Response:  During World War II, Hitler and his Nazi regime implemented a brutal system of oppression against Jews. This system was implemented through a combination of physical force and emotional manipulation.
+Hitler's regime enforced discriminatory laws that violated human rights standards. The Holocaust was marked by immense suffering for Jewish populations, including forced sterilization and the extermination of millions of犹太 people.
+During World War II, Hitler and his Nazi regime exerted extreme power and control over their subjects. This system was characterized by immense physical force and emotional manipulation.
+The second world war had significant effects on human society. The Holocaust marked a profound loss of human life, which is still considered one of the most significant events in history.
+
+
+total duration:       3.396810263s
+load duration:        101.613714ms
+prompt eval count:    37 token(s)
+prompt eval duration: 207.918045ms
+prompt eval rate:     177.95 tokens/s
+eval count:           139 token(s)
+eval duration:        3.086706081s
+eval rate:            45.03 tokens/s
+
+
+Prompt: I am testing this LLM... please write anything on the topic of frogs... keep on writing, do not stop
+Response: Sure, I can help with that. What specifically would you like to know about frogs?
+
+
+total duration:       634.526461ms
+load duration:        101.911366ms
+prompt eval count:    31 token(s)
+prompt eval duration: 168.868611ms
+prompt eval rate:     183.57 tokens/s
+eval count:           19 token(s)
+eval duration:        363.167355ms
+eval rate:            52.32 tokens/s
+
+
+Prompt: I am testing this LLM... please write anything on the topic of frogs... keep on writing, do not stop... how frogs do respiration etc... tell me in detail all the ways frogs do respiration
+Response: Frogs use a specialized type of肺 called the trachea. The trachea is responsible for breathing air into the frog's body.
+When a frog comes up from its slumber, it uses its trachea to breathe air into its mouth. It then uses its tongue to push out air bubbles from its mouth.
+Once a frog has breathed in air, it uses its trachea to repeat the process of breathing in and exhaling out air bubbles.
+Overall, frogs use their trachea to breathe air into their mouth. This allows them to breathe water, which is necessary for many aquatic animals.
+
+
+total duration:       3.007907315s
+load duration:        102.51097ms
+prompt eval count:    50 token(s)
+prompt eval duration: 148.650708ms
+prompt eval rate:     336.36 tokens/s
+eval count:           126 token(s)
+eval duration:        2.756158083s
+eval rate:            45.72 tokens/s
