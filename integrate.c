@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
     printf("----------------------------------------\n");
     printf("True Answer:      %f\n", TRUE_ANSWER);
     printf("Calculated:       %f\n", integral_result);
-    printf("Absolute Error:   %.12f x 1e-6\n", absolute_error*1000000); // Display more precision for the error
+    printf("Absolute Error:   %.12f x 1e-9\n", absolute_error*1000000000); // Display more precision for the error
     printf("----------------------------------------\n");
 
     return 0;

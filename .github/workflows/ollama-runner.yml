@@ -1,30 +1,52 @@
-name: Run Ollama Prompt
-on: [workflow_dispatch] # Allows you to run this manually
+name: Ollama and Ngrok Server
+
+on:
+  workflow_dispatch:
+    inputs:
+      host_port:
+        description: 'Host port for Ollama API'
+        required: true
+        default: '11434' # Ollama's default API port
+        type: string
+      model_name:
+        description: 'Ollama model to pull (e.g., qwen:0.5b, llama3:8b)'
+        required: true
+        default: 'qwen:0.5b'
+        type: string
+      sleep_duration:
+        description: 'Duration (in seconds) to keep the tunnel open (e.g., 300 for 5 mins)'
+        required: true
+        default: '300'
+        type: string
 
 jobs:
-  run-model-from-prompt:
-    # Target your Raspberry Pi runner
-    # swap uncomment and comment the next two lines to run on actual github servers
+  deploy:
     # runs-on: ubuntu-latest
     runs-on: [self-hosted, arm64, rpi]
 
     steps:
-      - name: 1. Check out repository code
-        uses: actions/checkout@v4
+    - name: Download and install Ollama
+      run: |
+        curl -L -o ollama-linux-amd64.tgz https://github.com/ollama/ollama/releases/latest/download/ollama-linux-amd64.tgz
+        tar -xOzf ollama-linux-amd64.tgz bin/ollama > ollama
+        chmod +x ollama
 
-      - name: 2. Make setup script executable
-        run: chmod +x ./setup_ollama.sh
+    - name: Download & configure ngrok
+      env:
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+      run: |
+        curl -L -o ngrok.tgz https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+        tar -xvzf ngrok.tgz
+        chmod +x ngrok
+        ./ngrok config add-authtoken "$NGROK_TOKEN"
 
-      - name: 3. Run Ollama setup script
-        # This ensures the container is running and model is pulled
-        run: ./setup_ollama.sh
-
-      - name: 4. Install Python dependencies
-        # The 'myoung34/github-runner' image is based on Ubuntu
-        # We need to install pip and the 'requests' library
-        run: |
-          pip3 install requests
-
-      - name: 5. Run the Python script
-        # This will fetch the prompt and run the model
-        run: python3 ./run_model.py
+    - name: Start Ollama, Ngrok, Pull Model, and Keep Alive
+      env:
+        HOST_PORT: ${{ github.event.inputs.host_port }}
+        MODEL_NAME: ${{ github.event.inputs.model_name }}
+        SLEEP_DURATION_SECONDS: ${{ github.event.inputs.sleep_duration }}
+      run: |
+        export OLLAMA_HOST=0.0.0.0:"$HOST_PORT"
+        ./ngrok http "$HOST_PORT" > /dev/null 2>&1 & ./ollama serve & sleep 5
+        ./ollama pull "$MODEL_NAME"
+        sleep "$SLEEP_DURATION_SECONDS"
