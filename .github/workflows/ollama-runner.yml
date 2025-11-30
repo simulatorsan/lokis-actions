@@ -1,4 +1,4 @@
-name: Ollama and Ngrok Server
+name: Run Ollama
 
 on:
   workflow_dispatch:
@@ -21,8 +21,8 @@ on:
 
 jobs:
   deploy:
-    # runs-on: ubuntu-latest
-    runs-on: [self-hosted, arm64, rpi]
+    runs-on: ubuntu-latest
+    # runs-on: [self-hosted, arm64, rpi]
 
     steps:
     - name: Download and install Ollama
