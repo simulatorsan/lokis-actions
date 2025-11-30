@@ -24,7 +24,7 @@ jobs:
       run: |
         curl -L -o ollama-linux-amd64.tgz https://github.com/ollama/ollama/releases/latest/download/ollama-linux-amd64.tgz
         tar -xvzf ollama-linux-amd64.tgz
-        mv ./ollama ollama
+        mv ./bin/ollama ollama
         chmod +x ollama
 
     - name: Pull Ollama model
