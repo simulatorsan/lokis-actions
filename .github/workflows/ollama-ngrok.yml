@@ -13,24 +13,24 @@ on:
         required: true
         default: 'qwen:0.5b'
         type: string
+      sleep_duration:
+        description: 'Duration (in seconds) to keep the tunnel open (e.g., 300 for 5 mins)'
+        required: true
+        default: '300'
+        type: string
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
 
     steps:
     - name: Download and install Ollama
       run: |
         curl -L -o ollama-linux-amd64.tgz https://github.com/ollama/ollama/releases/latest/download/ollama-linux-amd64.tgz
-        tar -xvzf ollama-linux-amd64.tgz
-        mv ./bin/ollama ollama
+        tar -xOzf ollama-linux-amd64.tgz bin/ollama > ollama
         chmod +x ollama
-
-    - name: Pull Ollama model
-      run: |
-        ./ollama serve & sleep 5
-        ./ollama pull ${{ github.event.inputs.model_name }}
+        lscpu
+        free -h
 
     - name: Download & configure ngrok
       env:
@@ -41,9 +41,13 @@ jobs:
         chmod +x ngrok
         ./ngrok config add-authtoken "$NGROK_TOKEN"
 
-    - name: Start Ollama and Ngrok
+    - name: Start Ollama, Ngrok, Pull Model, and Keep Alive
       env:
         HOST_PORT: ${{ github.event.inputs.host_port }}
+        MODEL_NAME: ${{ github.event.inputs.model_name }}
+        SLEEP_DURATION_SECONDS: ${{ github.event.inputs.sleep_duration }}
       run: |
         export OLLAMA_HOST=0.0.0.0:"$HOST_PORT"
-        ./ngrok http "$HOST_PORT" > /dev/null 2>&1 & ./ollama serve
+        ./ngrok http "$HOST_PORT" > /dev/null 2>&1 & ./ollama serve & sleep 5
+        ./ollama pull "$MODEL_NAME"
+        sleep "$SLEEP_DURATION_SECONDS"
