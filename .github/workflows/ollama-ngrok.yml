@@ -1,0 +1,49 @@
+name: Ollama and Ngrok Server
+
+on:
+  workflow_dispatch:
+    inputs:
+      host_port:
+        description: 'Host port for Ollama API'
+        required: true
+        default: '11434' # Ollama's default API port
+        type: string
+      model_name:
+        description: 'Ollama model to pull (e.g., qwen:0.5b, llama3:8b)'
+        required: true
+        default: 'qwen:0.5b'
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - name: Download and install Ollama
+      run: |
+        curl -L -o ollama-linux-amd64.tgz https://github.com/ollama/ollama/releases/latest/download/ollama-linux-amd64.tgz
+        tar -xvzf ollama-linux-amd64.tgz
+        mv ./ollama ollama
+        chmod +x ollama
+
+    - name: Pull Ollama model
+      run: |
+        ./ollama serve & sleep 5
+        ./ollama pull ${{ github.event.inputs.model_name }}
+
+    - name: Download & configure ngrok
+      env:
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+      run: |
+        curl -L -o ngrok.tgz https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+        tar -xvzf ngrok.tgz
+        chmod +x ngrok
+        ./ngrok config add-authtoken "$NGROK_TOKEN"
+
+    - name: Start Ollama and Ngrok
+      env:
+        HOST_PORT: ${{ github.event.inputs.host_port }}
+      run: |
+        export OLLAMA_HOST=0.0.0.0:"$HOST_PORT"
+        ./ngrok http "$HOST_PORT" > /dev/null 2>&1 & ./ollama serve
